@@ -1,0 +1,22 @@
+#! /usr/bin/env ruby
+
+require 'jekyll'
+require 'stackprof'
+
+def relative_to_root(*args)
+  File.expand_path(File.join(*args), File.dirname(File.dirname(__FILE__)))
+end
+
+config = Jekyll.configuration({
+  "source"      => relative_to_root("tsite"),
+  "destination" => relative_to_root("tsite", "_site")
+})
+site   = Jekyll::Site.new(config)
+
+profile = StackProf.run(mode: :cpu) do
+  site.process
+end
+
+File.open("tmp/stackprof-cpu-process.dump", 'wb') do |f|
+  f.write Marshal.dump(profile)
+end
