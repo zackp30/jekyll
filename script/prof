@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'jekyll'
+
+options = {
+  'markdown' => 'redcarpet',
+  'highlighter' => 'pygments',
+  'source' => File.expand_path('../../site', __FILE__),
+  'destination' => '/tmp/jekyll'
+}
+
+config = Jekyll.configuration(options)
+Jekyll::Commands::Build.process(config)
