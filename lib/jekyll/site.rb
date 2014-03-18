@@ -3,7 +3,8 @@ module Jekyll
     attr_accessor :config, :layouts, :posts, :pages, :static_files,
                   :categories, :exclude, :include, :source, :dest, :lsi, :highlighter,
                   :permalink_style, :tags, :time, :future, :safe, :plugins, :limit_posts,
-                  :show_drafts, :keep_files, :baseurl, :data, :file_read_opts, :gems
+                  :show_drafts, :keep_files, :baseurl, :data, :file_read_opts, :gems,
+                  :collections
 
     attr_accessor :converters, :generators
 
@@ -202,19 +203,7 @@ module Jekyll
     #
     # Returns nothing
     def read_data(dir)
-      base = File.join(source, dir)
-      return unless File.directory?(base) && (!safe || !File.symlink?(base))
-
-      entries = Dir.chdir(base) { Dir['*.{yaml,yml}'] }
-      entries.delete_if { |e| File.directory?(File.join(base, e)) }
-
-      entries.each do |entry|
-        path = File.join(source, dir, entry)
-        next if File.symlink?(path) && safe
-
-        key = sanitize_filename(File.basename(entry, '.*'))
-        self.data[key] = SafeYAML.load_file(path)
-      end
+      CollectionsReader.new(site).read("data")
     end
 
     # Run each of the Generators.
