@@ -1,13 +1,13 @@
 module Jekyll
   class Document
 
-    attr_reader :collection, :subdirectory, :filename
+    attr_reader :collection, :subdirectory, :relative_path
 
-    def initialize(collection, data = {}, contents = "", file_metadata = {})
+    def initialize(collection, info = {})
       @collection    = collection
-      @data          = data
-      @contents      = contents
-      @file_metadata = file_metadata
+      @data          = info[:data]
+      @contents      = info[:contents]
+      @relative_path = info.fetch(:relative_path)
     end
 
     def site
@@ -18,8 +18,18 @@ module Jekyll
       Jekyll.sanitized_path(site.source, relative_path)
     end
 
-    def relative_path
-      File.join(file_metadata["subdirectory"], file_metadata["filename"])
+    def to_liquid
+      data.merge {
+        "url"   => url,
+        "path"  => path,
+      }
+    end
+
+    def url
+      if rendered?
+
+      else
+      end
     end
 
   end
