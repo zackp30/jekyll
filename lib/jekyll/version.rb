@@ -1,3 +1,3 @@
 module Jekyll
-  VERSION = '1.4.3' # Octopress Gemfile does not recognise letters, revert back to this.
+  VERSION = '1.5.0' # Octopress Gemfile does not recognise letters, revert back to this.
 end
